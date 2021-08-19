@@ -1,0 +1,61 @@
+{
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "dev": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "firebase": ">=8"
+  },
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "5.0.3",
+    "husky": "7.0.1",
+    "size-limit": "5.0.3",
+    "tsdx": "0.14.1",
+    "tslib": "2.3.1",
+    "typescript": "4.3.5",
+    "firebase": "8.9.1"
+  },
+  "dependencies": {
+    "@firebase-logger/core": "0.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "@firebase-logger/web",
+  "author": "qlerebours",
+  "module": "dist/web.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/web.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/web.esm.js",
+      "limit": "10 KB"
+    }
+  ]
+}

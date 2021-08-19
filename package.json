@@ -1,0 +1,17 @@
+{
+  "name": "firebase-logger",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "4.0.0"
+  },
+  "scripts": {
+    "bs": "lerna bootstrap",
+    "dev": "lerna run dev --parallel --stream",
+    "build": "lerna run build --stream"
+  }
+}
