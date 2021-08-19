@@ -3,8 +3,10 @@
     "packages/*",
     "examples/*"
   ],
-  "version": "0.0.0",
-  "npmClientArgs": ["--no-lockfile"],
+  "version": "0.0.1",
+  "npmClientArgs": [
+    "--no-lockfile"
+  ],
   "npmClient": "yarn",
   "useWorkspaces": true
 }
