@@ -1,10 +1,19 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { sum } from '@firebase-logger/web';
+import logger, { sum } from '@firebase-logger/web';
+import Head from 'next/head';
+import Image from 'next/image';
+
+import styles from '../styles/Home.module.css';
+
+import { useEffect } from "react";
+
+
 
 export default function Home() {
-  console.log(sum(10, 12));
+
+  useEffect(() => {
+    logger.debug('This is a working test!');
+    window.setTimeout(() => logger.warn('Warning !'), 4000)
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -68,5 +77,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
+  );
 }

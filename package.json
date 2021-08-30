@@ -8,11 +8,24 @@
     "examples/example-web"
   ],
   "devDependencies": {
-    "lerna": "4.0.0"
+    "@trivago/prettier-plugin-sort-imports": "2.0.4",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.24.1",
+    "lerna": "4.0.0",
+    "lint-staged": "11.1.2",
+    "prettier": "2.3.2"
   },
   "scripts": {
     "bs": "lerna bootstrap",
     "dev": "lerna run dev --parallel --stream",
-    "build": "lerna run build --stream"
+    "build": "lerna run build --stream",
+    "pretty": "prettier -w ."
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json}": "prettier --write"
   }
 }

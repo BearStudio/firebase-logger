@@ -1,7 +1,16 @@
-import '../styles/globals.css'
+import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import firebase from "firebase/app";
+import logger from "@firebase-logger/web";
+if (!firebase.apps.length) {
+  console.log(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
+  firebase.initializeApp(JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG));
 }
 
-export default MyApp
+function MyApp({ Component, pageProps }) {
+  logger.init(true, null, 'loggers/mycustomtest', 'logs-mycustomtest');
+
+  return <Component {...pageProps} />;
+}
+
+export default MyApp;
