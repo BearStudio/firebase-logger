@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 /**
  * Before using, you should know that this logger requires firebase to be installed,
  * and the database dependency.
@@ -10,14 +9,15 @@ export type GetUserIdType = () => Promise<string | number>
 interface SnapInterface {
   val: () => { level: string }
 }
-interface FirebaseInstanceInterface {
-  ref: (refName: string) => {
-    once: (onceName: string) => Promise<SnapInterface>,
-    set: (object: unknown) => Promise<unknown>
-  },
-}
+// interface FirebaseInstanceInterface {
+//   ref: (refName: string) => {
+//     once: (onceName: string) => Promise<SnapInterface>,
+//     set: (object: unknown) => Promise<unknown>
+//   },
+// }
 export type InitType = (
-    firebaseDatabaseInstance: FirebaseInstanceInterface,
+    // firebaseDatabaseInstance: FirebaseInstanceInterface,
+    firebaseDatabaseInstance: any,
     shouldLogRemotely: boolean,
     getUserId: GetUserIdType | null,
     databaseLoggerPathOrNull: string | null,
@@ -26,7 +26,6 @@ export type InitType = (
 export type ConsoleLogMethodType = (...args: unknown[]) => void;
 export type LogMethodType = (firebaseInstance: any, ...args: unknown[]) => void;
 // TODO FirebaseInstanceInterface
-
 
 export type LoggerType = {
   debug: LogMethodType,
@@ -94,14 +93,15 @@ let databaseLogsCollection: string;
  * If it's not set, the default collection name is "logs"
  */
 const init = (
-  firebaseDatabaseInstance: FirebaseInstanceInterface,
-  shouldLogRemotely: boolean,
+  // firebaseDatabaseInstance: FirebaseInstanceInterface,
+  firebaseDatabaseInstance: any,
+  shouldLogRemotely: boolean = true,
   getUserId: GetUserIdType | null,
-  databaseLoggerPathOrNull: string | null,
+  databaseLoggerPathOrNull: string | null = ,
   databaseLogsCollectionOrNull: string | null,
 ): void => {
   isDev = !shouldLogRemotely;
-  databaseLogsCollection = databaseLogsCollectionOrNull || 'logs';
+  databaseLogsCollection = databaseLogsCollectionOrNull || 'logs/main';
   const databaseLoggerPath = databaseLoggerPathOrNull || 'loggers/main';
   try {
     firebaseDatabaseInstance
@@ -147,7 +147,7 @@ const getLogPath = (): string => {
 
 const logMessage = (
   requiredLogLevel: LogLevel,
-  firebaseDatabaseInstance: FirebaseInstanceInterface,
+  firebaseDatabaseInstance: any,
   ...infos: unknown[]
 ) => {
   if (isDev) {
@@ -173,23 +173,23 @@ const logMessage = (
   }
 };
 
-const debug = (databaseInstance: FirebaseInstanceInterface, ...datas: unknown[]): void => {
+const debug = (databaseInstance: any, ...datas: unknown[]): void => {
   logMessage(LOG_LEVELS.DEBUG, databaseInstance, ...datas);
 };
 
-const info = (databaseInstance: FirebaseInstanceInterface, ...datas: unknown[]): void => {
+const info = (databaseInstance: any, ...datas: unknown[]): void => {
   logMessage(LOG_LEVELS.INFO, databaseInstance, ...datas);
 };
 
-const warn = (databaseInstance: FirebaseInstanceInterface, ...datas: unknown[]): void => {
+const warn = (databaseInstance: any, ...datas: unknown[]): void => {
   logMessage(LOG_LEVELS.WARN, databaseInstance, ...datas);
 };
 
-const error = (databaseInstance: FirebaseInstanceInterface, ...datas: unknown[]): void => {
+const error = (databaseInstance: any, ...datas: unknown[]): void => {
   logMessage(LOG_LEVELS.ERROR, databaseInstance, ...datas);
 };
 
-const critical = (databaseInstance: FirebaseInstanceInterface, ...datas: unknown[]): void => {
+const critical = (databaseInstance: any, ...datas: unknown[]): void => {
   logMessage(LOG_LEVELS.CRITICAL, databaseInstance, ...datas);
 };
 
