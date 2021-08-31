@@ -73,6 +73,21 @@ You can re-initialize the logger as soon as the user is authenticated to prevent
 path, but in the user-specific path. [Learn more](https://github.com/BearStudio/firebase-logger#reactnative-sdk)
 TODO link
 
+#### It's ready, log messages
+It can be used like the standard `console` object.
+```javascript
+import logger from '@firebase-logger/web'
+
+logger.debug('Hello world');
+logger.info('Hello world', 42);
+logger.warn({ title: 'Hello', subtitle: 'World' });
+logger.error(error);
+logger.critical('Something bad happened');
+```
+
+### ReactNative SDK
+🚧 This part is currently in development
+
 ## API
 
 ### init
