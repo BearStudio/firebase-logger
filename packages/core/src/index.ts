@@ -95,9 +95,9 @@ let databaseLogsCollection: string;
 const init = (
   // firebaseDatabaseInstance: FirebaseInstanceInterface,
   firebaseDatabaseInstance: any,
-  shouldLogRemotely: boolean = true,
+  shouldLogRemotely = true,
   getUserId: GetUserIdType | null,
-  databaseLoggerPathOrNull: string | null = ,
+  databaseLoggerPathOrNull: string | null,
   databaseLogsCollectionOrNull: string | null,
 ): void => {
   isDev = !shouldLogRemotely;
