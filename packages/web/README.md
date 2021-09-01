@@ -1,103 +1,166 @@
-# TSDX User Guide
+# Firebase logger - Get your (mobile) app logs remotely
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+This library allows you to log data from a web or mobile app to a Firebase Realtime Database, to be able to debug and
+monitor remotely.
 
-> This TSDX setup is meant for developing libraries (not apps!) that can be published to NPM. If you’re looking to build a Node app, you could use `ts-node-dev`, plain `ts-node`, or simple `tsc`.
+## ✨ Features
 
-> If you’re new to TypeScript, checkout [this handy cheatsheet](https://devhints.io/typescript)
+- Save logs to a Firebase Realtime Database
+- Logs locally in development mode and remotely in production mode
+- Remote and reactive triggerable log level to prevent logs' flooding
+- Supports [firebase](https://www.npmjs.com/package/firebase) SDKs
+  (if you are using [ReactNative firebase](https://www.npmjs.com/package/react-native-firebase) check `@firebase-logger/reactnative`)
+- Save logs to a user-specific path, to easily find user's logs
 
-## Commands
+## Get started
 
-TSDX scaffolds your new library inside `/src`.
+### Install the package
 
-To run TSDX, use:
+`npm i @firebase-logger/core @firebase-logger/web`
+or
+`yarn add @firebase-logger/core @firebase-logger/web`
 
-```bash
-npm start # or yarn start
-```
+### Prepare Firebase
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
+If you already have a Firebase setup in your project, you can skip this part.
 
-To do a one-off build, use `npm run build` or `yarn build`.
+1. Create a Firebase project
+2. Create the database with open rules (you can replace them later on with
+   the [example rules](https://github.com/BearStudio/firebase-logger#example-database-rules))
+3. Add an app to your project (get [help here](https://support.google.com/firebase/answer/9326094))
+4. Get the config and initialize Firebase in your code:
 
-To run tests, use `npm test` or `yarn test`.
+```javascript
+import firebase from "firebase/app";
 
-## Configuration
-
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`.
-
-### Bundle Analysis
-
-[`size-limit`](https://github.com/ai/size-limit) is set up to calculate the real cost of your library with `npm run size` and visualize the bundle with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
-```
-
-### Rollup
-
-TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
-
-### TypeScript
-
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
-
-## Continuous Integration
-
-### GitHub Actions
-
-Two actions are added by default:
-
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
-
-## Optimizations
-
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
+if (!firebase.apps.length) {
+  firebase.initializeApp(FIREBASE_CONFIG);
 }
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+5. Finally, don't forget to create the logger in database that will contain the log level, for instance, add this to the
+   database:
 
-## Module Formats
+```json
+{
+  "loggers": {
+    "production": {
+      "level": "ERROR"
+    }
+  }
+}
+```
 
-CJS, ESModules, and UMD module formats are supported.
+### Initialize the logger
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+```javascript
+import logger from "@firebase-logger/web";
 
-## Named Exports
+logger.init(process.env.NODE_ENV === 'production');
+```
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+It will initialize the logger that will log remotely only in production mode, under the `logs/main` path, using
+the `loggers/main`
+You can re-initialize the logger as soon as the user is authenticated to prevent logging everything in the `anonymous`
+path, but in the user-specific path. [Learn more](https://github.com/BearStudio/firebase-logger#reactnative-sdk)
+TODO link
 
-## Including Styles
+### It's ready, log messages
+It can be used like the standard `console` object.
+```javascript
+import logger from '@firebase-logger/web'
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
+logger.debug('Hello world');
+logger.info('Hello world', 42);
+logger.warn({ title: 'Hello', subtitle: 'World' });
+logger.error(error);
+logger.critical('Something bad happened');
+```
 
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+## API
 
-## Publishing to NPM
+### init
 
-We recommend using [np](https://github.com/sindresorhus/np).
+| Parameter | Required | Default value | Usage |
+| ------ | ------ | ------ | ------ |
+| shouldLogRemotely | No | `true` | Logs to Firebase only if set to true, otherwise, uses the standard `console` methods like `console.error` |
+| getUserId | No | `async () => 'anonymous'` | A function that returns a promise containing the user identifier as a string or a number |
+| databaseLoggerPathOrNull | No | `'loggers/main'` | The database path to the logger data. Note that this is where the log level is defined ([see the sample data](https://github.com/BearStudio/firebase-logger#example-loggers-sample)) |
+| databaseLogsCollectionOrNull | false | `'logs/main'` | The database path to the logs. It gets created automatically when logging |
+
+### log
+
+You can use the following methods to log information:
+
+| Method | Logs when log level is |
+| ------ | ------ |
+| `debug` | `DEBUG` |
+| `info` | `DEBUG`, `INFO` |
+| `warn` | `DEBUG`, `INFO`, `WARN` |
+| `error` | `DEBUG`, `INFO`, `WARN`, `ERROR` |
+| `critical` | `DEBUG`, `INFO`, `WARN`, `ERROR`, `CRITICAL` |
+
+All these methods accept as many arguments as you want to provide them.
+
+## Samples
+
+<details id="logger-initialization-user-id">
+    <summary>Logger initialization with userId</summary>
+    ```javascript
+    const onUserAuthenticated = () => {
+      logger.init(
+        process.env.NODE_ENV === 'production',
+        () => AsyncStorage.getItem('@myApp/userEMail'), // can return a promise
+        'loggers/production',
+        'logs/production'
+      );
+    }
+    ```
+</details>
+
+
+<details id="example-database-rules">
+    <summary>Example database rules</summary>
+    ```json
+    {
+      "rules": {
+        "loggers": {
+          ".read": true,
+          ".write": false
+        },
+        "logs-dev": {
+          ".read": false,
+          ".write": true
+        },
+        "logs-staging": {
+          ".read": false,
+          ".write": true
+        },
+        "logs-prod": {
+          ".read": false,
+          ".write": true
+        }
+      }
+    }
+    ```
+</details>
+
+
+<details id="example-loggers-sample">
+    <summary>Example loggers sample</summary>
+    ```json
+    {
+      "loggers": {
+        "dev": {
+          "level": "WARN"
+        },
+        "staging": {
+          "level": "CRITICAL"
+        },
+        "prod": {
+          "level": "CRITICAL"
+        }
+      }
+    }
+    ```
+</details>
