@@ -58,6 +58,9 @@
       "limit": "10 KB"
     }
   ],
+  "repository": {
+    "url": "https://github.com/BearStudio/firebase-logger"
+  },
   "publishConfig": {
     "access": "public"
   }

@@ -12,11 +12,27 @@ monitor remotely.
   and [ReactNative firebase](https://www.npmjs.com/package/react-native-firebase) SDKs
 - Save logs to a user-specific path, to easily find user's logs
 
+## 🗒️ Table of contents
+* [Firebase logger - Get your (mobile) app logs remotely](#firebase-logger---get-your-mobile-app-logs-remotely)
+    * [Features](#-features)
+    * [Get started](#get-started)
+        * [Firebase SDK](#firebase-sdk)
+            * [Install the package](#install-the-package)
+            * [Prepare Firebase](#prepare-firebase)
+            * [Initialize the logger](#initialize-the-logger)
+            * [It's ready, log messages](#its-ready-log-messages)
+        * [ReactNative SDK](#reactnative-sdk)
+    * [API](#api)
+        * [init](#init)
+        * [log](#log)
+    * [Samples](#samples)
+
+
 ## Get started
 
 Depending on the SDK you want to use, read
-the [Firebase SDK](https://github.com/BearStudio/firebase-logger#firebase-sdk) section or the
-[ReactNative SDK](https://github.com/BearStudio/firebase-logger#reactnative-sdk) section below.
+the [Firebase SDK](#firebase-sdk) section or the
+[ReactNative SDK](#reactnative-sdk) section below.
 
 ### Firebase SDK
 
@@ -34,7 +50,7 @@ If you already have a Firebase setup in your project, you can skip this part.
 
 1. Create a Firebase project
 2. Create the database with open rules (you can replace them later on with
-   the [example rules](https://github.com/BearStudio/firebase-logger#example-database-rules))
+   the example rules in the code [samples](#samples))
 3. Add an app to your project (get [help here](https://support.google.com/firebase/answer/9326094))
 4. Get the config and initialize Firebase in your code:
 
@@ -70,8 +86,7 @@ logger.init(process.env.NODE_ENV === 'production');
 It will initialize the logger that will log remotely only in production mode, under the `logs/main` path, using
 the `loggers/main`
 You can re-initialize the logger as soon as the user is authenticated to prevent logging everything in the `anonymous`
-path, but in the user-specific path. [Learn more](https://github.com/BearStudio/firebase-logger#reactnative-sdk)
-TODO link
+path, but in the user-specific path. Learn more in the code [samples](#samples)
 
 #### It's ready, log messages
 It can be used like the standard `console` object.
@@ -117,7 +132,7 @@ All these methods accept as many arguments as you want to provide them.
 
 <details id="logger-initialization-user-id">
     <summary>Logger initialization with userId</summary>
-    ```javascript
+
     const onUserAuthenticated = () => {
       logger.init(
         process.env.NODE_ENV === 'production',
@@ -126,13 +141,13 @@ All these methods accept as many arguments as you want to provide them.
         'logs/production'
       );
     }
-    ```
+    
 </details>
 
 
 <details id="example-database-rules">
     <summary>Example database rules</summary>
-    ```json
+    
     {
       "rules": {
         "loggers": {
@@ -153,13 +168,12 @@ All these methods accept as many arguments as you want to provide them.
         }
       }
     }
-    ```
 </details>
 
 
 <details id="example-loggers-sample">
     <summary>Example loggers sample</summary>
-    ```json
+    
     {
       "loggers": {
         "dev": {
@@ -173,5 +187,4 @@ All these methods accept as many arguments as you want to provide them.
         }
       }
     }
-    ```
 </details>
