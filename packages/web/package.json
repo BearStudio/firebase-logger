@@ -57,5 +57,8 @@
       "path": "dist/web.esm.js",
       "limit": "10 KB"
     }
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
