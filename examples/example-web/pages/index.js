@@ -1,4 +1,4 @@
-import logger, { sum } from '@firebase-logger/web';
+import logger from '@firebase-logger/web';
 import Head from 'next/head';
 import Image from 'next/image';
 
