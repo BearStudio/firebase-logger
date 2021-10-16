@@ -3,12 +3,12 @@
 This library allows you to log data from a web or mobile app to a Firebase Realtime Database, to be able to debug and
 monitor remotely.
 
-Compatibility:
+**Compatibility**:
 
-|Firebase version|Logger version|
+|Firebase version|@firebase-logger version|
 |---|---|
-| <9 | 1.0.0 |
-| >=9 | >=1.1.0|
+| <9 | 1.*.* |
+| >=9 | >=2.*.* |
 
 ## ✨ Features
 
