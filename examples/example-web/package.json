@@ -1,6 +1,6 @@
 {
   "name": "example-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@firebase-logger/web": "^1.0.0-alpha.3",
+    "@firebase-logger/web": "^1.0.1",
     "firebase": "^8.9.1",
     "next": "11.1.0",
     "react": "17.0.2",
