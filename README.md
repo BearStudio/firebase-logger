@@ -7,8 +7,8 @@ monitor remotely.
 
 |Firebase version|@firebase-logger version|
 |---|---|
-| <9 | 1.*.* |
-| >=9 | >=2.*.* |
+| <9 | 1.x.x |
+| >=9 | >=2.x.x |
 
 ## ✨ Features
 
