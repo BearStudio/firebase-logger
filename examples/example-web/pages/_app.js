@@ -1,10 +1,10 @@
 import '../styles/globals.css';
 
-import firebase from "firebase/app";
+import { initializeApp, getApps } from 'firebase/app';
 import logger from "@firebase-logger/web";
-if (!firebase.apps.length) {
+if (!getApps().length) {
   console.log(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
-  firebase.initializeApp(JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG));
+  initializeApp(JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG));
 }
 
 function MyApp({ Component, pageProps }) {

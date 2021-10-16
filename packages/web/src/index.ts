@@ -1,5 +1,4 @@
-import firebase from 'firebase/app';
-import 'firebase/database';
+import firebaseDatabaseInstance from 'firebase/database';
 
 import coreLogger, { GetUserIdType, LogMethodType } from '@firebase-logger/core';
 
@@ -41,7 +40,7 @@ const init = (
   databaseLogsCollectionOrNull: string | null,
 ): void => {
   coreLogger.init(
-    firebase.database(),
+    firebaseDatabaseInstance,
     shouldLogRemotely,
     getUserId,
     databaseLoggerPathOrNull,
@@ -54,7 +53,7 @@ const init = (
  * @param datas all the pieces of data to log.
  */
 const debug = (...datas: unknown[]): void => {
-  coreLogger.debug(firebase.database(), ...datas);
+  coreLogger.debug(firebaseDatabaseInstance, ...datas);
 };
 
 /**
@@ -62,7 +61,7 @@ const debug = (...datas: unknown[]): void => {
  * @param datas all the pieces of data to log.
  */
 const info = (...datas: unknown[]): void => {
-  coreLogger.info(firebase.database(), ...datas);
+  coreLogger.info(firebaseDatabaseInstance, ...datas);
 };
 
 /**
@@ -70,7 +69,7 @@ const info = (...datas: unknown[]): void => {
  * @param datas all the pieces of data to log.
  */
 const warn = (...datas: unknown[]): void => {
-  coreLogger.warn(firebase.database(), ...datas);
+  coreLogger.warn(firebaseDatabaseInstance, ...datas);
 };
 
 /**
@@ -78,7 +77,7 @@ const warn = (...datas: unknown[]): void => {
  * @param datas all the pieces of data to log.
  */
 const error = (...datas: unknown[]): void => {
-  coreLogger.error(firebase.database(), ...datas);
+  coreLogger.error(firebaseDatabaseInstance, ...datas);
 };
 
 /**
@@ -86,7 +85,7 @@ const error = (...datas: unknown[]): void => {
  * @param datas all the pieces of data to log.
  */
 const critical = (...datas: unknown[]): void => {
-  coreLogger.critical(firebase.database(), ...datas);
+  coreLogger.critical(firebaseDatabaseInstance, ...datas);
 };
 
 const logger: LoggerType = {
