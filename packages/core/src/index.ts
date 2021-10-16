@@ -6,9 +6,11 @@
  */
 
 export type GetUserIdType = () => Promise<string | number>
+
 interface SnapInterface {
   val: () => { level: string }
 }
+
 // interface FirebaseInstanceInterface {
 //   ref: (refName: string) => {
 //     once: (onceName: string) => Promise<SnapInterface>,
@@ -16,12 +18,12 @@ interface SnapInterface {
 //   },
 // }
 export type InitType = (
-    // firebaseDatabaseInstance: FirebaseInstanceInterface,
-    firebaseDatabaseInstance: any,
-    shouldLogRemotely: boolean,
-    getUserId: GetUserIdType | null,
-    databaseLoggerPathOrNull: string | null,
-    databaseLogsCollectionOrNull: string | null,
+  // firebaseDatabaseInstance: FirebaseInstanceInterface,
+  firebaseDatabaseInstance: any,
+  shouldLogRemotely: boolean,
+  getUserId: GetUserIdType | null,
+  databaseLoggerPathOrNull: string | null,
+  databaseLogsCollectionOrNull: string | null,
 ) => void;
 export type ConsoleLogMethodType = (...args: unknown[]) => void;
 export type LogMethodType = (firebaseInstance: any, ...args: unknown[]) => void;
@@ -41,6 +43,7 @@ interface LogLevel {
   priority: number,
   localMethod: ConsoleLogMethodType,
 }
+
 // We define mutiple log levels. If the log level is CRITICAL
 // only logs with priority >= to CRITICAL (4) will be logged
 export const LOG_LEVELS: { [key: string]: LogLevel } = {
@@ -76,7 +79,7 @@ let currentLogLevel = LOG_LEVELS.CRITICAL.name;
 let userId: string | number | null = null;
 let databaseLogsCollection: string;
 /**
- * @param firebaseDatabaseInstance: The instance of the database to use to send the logs to.
+ * @param firebaseDatabase: The instance of the database to use to send the logs to.
  *
  * @param shouldLogRemotely: Aims at knowing if the logs should be sent to firebase or only displayed in the local
  * console with methods like console.debug.
@@ -93,8 +96,7 @@ let databaseLogsCollection: string;
  * If it's not set, the default collection name is "logs"
  */
 const init = (
-  // firebaseDatabaseInstance: FirebaseInstanceInterface,
-  firebaseDatabaseInstance: any,
+  firebaseDatabase: any,
   shouldLogRemotely = true,
   getUserId: GetUserIdType | null,
   databaseLoggerPathOrNull: string | null,
@@ -104,11 +106,10 @@ const init = (
   databaseLogsCollection = databaseLogsCollectionOrNull || 'logs/main';
   const databaseLoggerPath = databaseLoggerPathOrNull || 'loggers/main';
   try {
-    firebaseDatabaseInstance
-      .ref(databaseLoggerPath)
-      .once('value')
+    const { get, ref, getDatabase } = firebaseDatabase;
+    get(ref(getDatabase(), databaseLoggerPath))
       .then((snap: SnapInterface) => {
-        if (snap && snap.val() && snap.val().level) {
+        if (snap?.val()?.level) {
           currentLogLevel = snap.val().level;
           console.log('log level is', snap.val().level);
         } else {
@@ -147,7 +148,7 @@ const getLogPath = (): string => {
 
 const logMessage = (
   requiredLogLevel: LogLevel,
-  firebaseDatabaseInstance: any,
+  firebaseDatabase: any,
   ...infos: unknown[]
 ) => {
   if (isDev) {
@@ -159,12 +160,11 @@ const logMessage = (
       const messageToLog = infos.reduce(
         (acc, cur) => `${acc} , ${JSON.stringify(cur)}`,
       );
-      firebaseDatabaseInstance
-        .ref(`${databaseLogsCollection}/${getLogPath()}`)
-        .set({
-          level: requiredLogLevel.name,
-          message: messageToLog,
-        })
+      const { set, ref, getDatabase } = firebaseDatabase;
+      set(ref(getDatabase(), `${databaseLogsCollection}/${getLogPath()}`), {
+        level: requiredLogLevel.name,
+        message: messageToLog,
+      })
         .then()
         .catch();
     } catch (e) {

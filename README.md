@@ -3,6 +3,13 @@
 This library allows you to log data from a web or mobile app to a Firebase Realtime Database, to be able to debug and
 monitor remotely.
 
+**Compatibility**:
+
+|Firebase version|@firebase-logger version|
+|---|---|
+| <9 | 1.*.* |
+| >=9 | >=2.*.* |
+
 ## ✨ Features
 
 - Save logs to a Firebase Realtime Database
